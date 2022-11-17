@@ -65,3 +65,4 @@ CREATE TABLE zonaventas(
 	descripcion VARCHAR(256)
 	ADD CONSTRAINT `vendedor` FOREIGN KEY (vendedor) REFERENCES vendedor(id);
 );
+
