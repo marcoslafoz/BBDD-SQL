@@ -47,3 +47,13 @@ DNI varchar(9) REFERENCES estudiantes(DNI),
 id_beca varchar(15) REFERENCES becas(codigo),
 PRIMARY KEY (DNI,id_beca)
 );
+
+--Modificacion 1
+create table requisitos(
+    codigo CHAR(10) PRIMARY KEY,
+    descripcion varchar(100)
+);
+
+ALTER TABLE municipio
+DROP COLUMN requisitos,
+ADD COLUMN codigo_requisito CHAR (7);

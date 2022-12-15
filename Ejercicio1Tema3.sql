@@ -31,3 +31,14 @@ CREATE TABLE habita(
 	Vivienda VARCHAR (35),
 	dueño BOOL default false
 );
+
+--Modificaciones 1
+ALTER TABLE municipio
+ADD COLUMN codigo_postal CHAR(7);
+
+--Modificaciones 2
+ALTER TABLE personas
+ADD COLUMN tipo_codigo ENUM('DNI','NIE','Pasaporte');
+
+-Modificaciones 3
+ALTER TABLE personas CHANGE COLUMN DNI codigo_identificacion CHAR(9);
