@@ -5,5 +5,6 @@ from empleado;
 SELECT cliente.nombre_cliente,
     telefono,
     nombre,
-    apellido1,
+    apellido1, 
+    apellido2
 from cliente;
