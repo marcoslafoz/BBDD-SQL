@@ -85,6 +85,9 @@ FROM cliente c
 WHERE codigo_empleado_rep_ventas is NULL ;
 
 -- 18. Visualizar cuál fue el primer y último pago que hizo algún cliente. 
+(SELECT codigo_cliente as 'C.Cliente', MIN(fecha_pago) as 'Primer pago' from pago order by fecha_pago limit 1)
+union 
+(select codigo_cliente as 'C.Cliente', max (fecha_pago) as 'Ultimo pago' from pago order by fecha_pago DESC limit 1);
 
 -- 19. Visualizar el código de cliente de aquellos clientes que hicieron pagos en 2008. 
 SELECT fecha_pago , codigo_cliente
@@ -112,6 +115,7 @@ from detalle_pedido dp group by dp.codigo_pedido ;
 -- 23. Visualizar un listado de los 20 códigos de productos más pedidos ordenado por
 -- cantidad pedida. (pista: Usar el filtro LIMIT de MySQL o el filtro rownum de
 -- Oracle.)
+SELECT codigo_producto  as 'C.Producto' , cantidad as 'Cantidad' from detalle_pedido dp order by cantidad desc limit 20;
 
 -- 24. Visualizar el número de pedido, código de cliente, fecha requerida y fecha de
 -- entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes
@@ -130,6 +134,14 @@ and DATEDIFF(fecha_esperada,fecha_entrega) >= 2 ;
 -- calcula sumando el coste del producto por el número de unidades vendidas. El
 -- IVA, es el 18% de la base imponible, y el total, la suma de los dos campos
 -- anteriores.
+SELECT * from pedido;
+SELECT * from detalle_pedido dp;
+SELECT sum (cantidad * precio_unidad) as 'Total',
+SUM(cantidad * precio_unidad)*0.18 as 'IVA',
+SUM (cantidad * precio_unidad)*1.18 as 'Total + IVA'
+FROM detalle_pedido dp, pedido p 
+WHERE dp.codigo_pedido = p.codigo_pedido 
+and p.estado != 'Rechazado';
 
 -- 26. Visualizar la misma información que en la pregunta anterior, pero agrupada por
 -- código de producto filtrada por los códigos que empiecen por FR.
