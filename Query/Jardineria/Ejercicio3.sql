@@ -33,7 +33,7 @@ HAVING sum (p.total) < c.limite_credito ;
 
 -- 6. Obtener el nombre y las unidades en stock de los productos que más unidades
 --tienen en stock y de los que menos unidades tienen.
-(SELECT nombre  a s 'Nombre', cantidad_en_stock as 'STOCK' from producto order by cantidad_en_stock  limit 5)
+(SELECT nombre  as 'Nombre', cantidad_en_stock as 'STOCK' from producto order by cantidad_en_stock  limit 5)
 union 
 (select nombre as 'Nombre', cantidad_en_stock as 'STOCK' from producto order by cantidad_en_stock  DESC limit 5);
 
