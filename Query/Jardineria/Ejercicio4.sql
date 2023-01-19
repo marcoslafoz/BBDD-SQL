@@ -49,4 +49,4 @@ SELECT e.codigo_empleado as 'C.Empleado' , CONCAT(e.nombre , ' ' , e.apellido1 ,
 from empleado e 
 left join cliente c on e.codigo_empleado = c.codigo_empleado_rep_ventas
 INNER  join empleado e2 on e.codigo_jefe = e2.codigo_empleado 
-where c.nombre_cliente is null;
+where c.nombre_cliente is null ;
