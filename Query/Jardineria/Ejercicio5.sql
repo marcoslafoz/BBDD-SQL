@@ -16,7 +16,6 @@ WHERE p.precio_venta = (SELECT max(p2.precio_venta) from producto p2);
 -- calcular cuál es el número total de unidades que se han vendido de cada producto a partir de los datos
 -- de la tabla detalle_pedido)
 
-
 -- 4. Los clientes cuyo límite de crédito sea mayor que los pagos que haya realizado. (Sin utilizar INNER JOIN).
 SELECT c.codigo_cliente , c.nombre_cliente , c.limite_credito , p2.total 
 FROM cliente c 
@@ -55,7 +54,7 @@ on e.codigo_jefe = e2.codigo_empleado
 where e.codigo_empleado
 not in (SELECT DISTINCT (c.codigo_empleado_rep_ventas) from cliente c);
 
---Ejercicios varios
+-- 1.4.9
 
 -- 1. Devuelve el listado de clientes indicando el nombre del cliente y cuántos pedidos ha realizado. Tenga en
 -- cuenta que pueden existir clientes que no han realizado ningún pedido.
