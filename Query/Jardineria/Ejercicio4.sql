@@ -35,6 +35,18 @@ WHERE dp.codigo_pedido is null ;
 
 -- 10. Devuelve las oficinas donde no trabajan ninguno de los empleados que hayan sido los representantes
 -- de ventas de algún cliente que haya realizado la compra de algún producto de la gama Frutales.
+select * from oficina o2 where o2.codigo_oficina
+not in(
+select o.codigo_oficina
+FROM cliente c, pedido p2, detalle_pedido dp, producto p,
+empleado e right join oficina o
+on e.codigo_oficina = o.codigo_oficina
+where c.codigo_cliente = p2.codigo_cliente
+and p2.codigo_pedido = dp.codigo_pedido
+and dp.codigo_producto = p.codigo_producto
+and p.gama = 'Frutales'
+and e.codigo_empleado = c.codigo_empleado_rep_ventas
+group by o.codigo_oficina);
 
 -- 11. Devuelve un listado con los clientes que han realizado algún pedido pero no han realizado ningún pago.
 SELECT c.codigo_cliente , c.nombre_cliente   

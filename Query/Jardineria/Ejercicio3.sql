@@ -37,6 +37,9 @@ HAVING sum (p.total) < c.limite_credito ;
 union 
 (select nombre as 'Nombre', cantidad_en_stock as 'STOCK' from producto order by cantidad_en_stock  DESC limit 5);
 
+SELECT * from producto p WHERE p.cantidad_en_stock = (SELECT max(p2.cantidad_en_stock) from producto p2)
+or p.cantidad_en_stock = (SELECT min(cantidad_en_stock) FROM producto p3) order by cantidad_en_stock ;
+
 -- 7. Obtener el nombre de los productos cuya gama pertenezca a plantas vistosas.
 SELECT p.codigo_producto , p.nombre , p.dimensiones , gp.gama , gp.descripcion_texto 
 FROM producto p , gama_producto gp 
