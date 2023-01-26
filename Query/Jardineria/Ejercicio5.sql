@@ -110,3 +110,16 @@ SELECT o.codigo_oficina , o.ciudad , COUNT( e.codigo_empleado ) as 'N. de emplea
 FROM oficina o 
 left join empleado e on o.codigo_oficina = e.codigo_oficina 
 GROUP by o.codigo_oficina;
+
+-- Nombra el nombre y apellidos de los empleados que tengan a mas de 2 personas a su cargo
+
+-- Nombra el nombre y apellidos de los empleados que tengan 3 clientes asociados o mas 
+
+SELECT 
+	c.codigo_empleado_rep_ventas as 'C.Empleado' , 
+	CONCAT(e.nombre , ' ' , e.apellido1) as 'Nombre empleado' , 
+	count(c.codigo_empleado_rep_ventas) as 'nClientes'
+FROM cliente c 
+left join empleado e on c.codigo_empleado_rep_ventas  = e.codigo_empleado 
+group by c.codigo_empleado_rep_ventas
+order by nClientes DESC --Falta filtrar nClientes > 3
