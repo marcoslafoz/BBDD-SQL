@@ -85,9 +85,28 @@ ORDER by c.nombre_cliente  asc;
 -- 4. Devuelve el nombre del cliente, el nombre y primer apellido de su representante de ventas y el número
 -- de teléfono de la oficina del representante de ventas, de aquellos clientes que no hayan realizado ningún pago.
 
+SELECT c.codigo_cliente  , c.nombre_cliente , c.codigo_empleado_rep_ventas , e.codigo_empleado , concat(e.nombre , ' ' , e.apellido1) as 'Nombre empleado' , o.telefono 
+FROM cliente c  
+left join empleado e on c.codigo_empleado_rep_ventas  = e.codigo_empleado
+inner join oficina o on e.codigo_oficina = o.codigo_oficina 
+WHERE c.codigo_cliente in (SELECT p.codigo_cliente  FROM pago p where p.codigo_cliente is null);
+
 -- 5. Devuelve el listado de clientes donde aparezca el nombre del cliente, el nombre y primer apellido de su
 -- representante de ventas y la ciudad donde está su oficina.
+SELECT c.codigo_cliente , c.nombre_cliente , e.codigo_empleado  , CONCAT(e.nombre , ' ' , e.apellido1) as 'Nombre empleado' , e.codigo_oficina , o.ciudad 
+FROM cliente c 
+left join empleado e on c.codigo_empleado_rep_ventas = e.codigo_empleado 
+inner join oficina o on e.codigo_oficina = o.codigo_oficina ;
 
 -- 6. Devuelve el nombre, apellidos, puesto y teléfono de la oficina de aquellos empleados que no sean representante de ventas de ningún cliente.
+SELECT e.codigo_empleado , CONCAT(e.nombre ,' ', e.apellido1 , ' ', e.apellido2) AS 'Nombre y apellidos' , e.puesto , o.telefono
+FROM empleado e 
+left join oficina o on e.codigo_oficina = o.codigo_oficina 
+where e.codigo_empleado not in (SELECT c.codigo_empleado_rep_ventas  FROM cliente c  where e.codigo_empleado is not null);
 
 -- 7. Devuelve un listado indicando todas las ciudades donde hay oficinas y el número de empleados que tiene.
+
+SELECT o.codigo_oficina , o.ciudad , COUNT( e.codigo_empleado ) as 'N. de empleados'
+FROM oficina o 
+left join empleado e on o.codigo_oficina = e.codigo_oficina 
+GROUP by o.codigo_oficina;
