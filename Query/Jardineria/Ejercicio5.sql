@@ -112,9 +112,14 @@ left join empleado e on o.codigo_oficina = e.codigo_oficina
 GROUP by o.codigo_oficina;
 
 -- Nombra el nombre y apellidos de los empleados que tengan a mas de 2 personas a su cargo
+SELECT e.codigo_jefe as 'C.Jefe' , e2.nombre as 'Nombre' , e2.apellido1 as 'Apellido' , COUNT(e2.codigo_empleado) as 'Nº Empleados a su cargo'
+FROM empleado e
+left join empleado e2 on e.codigo_jefe = e2.codigo_empleado 
+GROUP by e2.codigo_empleado 
+HAVING COUNT(e2.codigo_empleado) >= 2
+ORDER by e.codigo_jefe asc
 
 -- Nombra el nombre y apellidos de los empleados que tengan 3 clientes asociados o mas 
-
 SELECT 
 	c.codigo_empleado_rep_ventas as 'C.Empleado' , 
 	CONCAT(e.nombre , ' ' , e.apellido1) as 'Nombre empleado' , 
@@ -122,4 +127,5 @@ SELECT
 FROM cliente c 
 left join empleado e on c.codigo_empleado_rep_ventas  = e.codigo_empleado 
 group by c.codigo_empleado_rep_ventas
-order by nClientes DESC --Falta filtrar nClientes > 3
+HAVING COUNT(c.codigo_empleado_rep_ventas) >= 3
+order by nClientes DESC
