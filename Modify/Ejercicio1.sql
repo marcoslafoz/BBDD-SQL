@@ -46,6 +46,8 @@ FROM producto p
 left join detalle_pedido dp on p.codigo_producto = dp.codigo_producto 
 where dp.codigo_producto is NULL);
 
+-- 9. Borra los pagos del cliente con menor límite de crédito.
+
 -- 10. Establece a 0 el límite de crédito del cliente que menos unidades pedidas tenga del producto 11679.
 update cliente set limite_credito = 0 
 where cliente.codigo_cliente = 
@@ -53,6 +55,19 @@ where cliente.codigo_cliente =
 where c.codigo_cliente = p.codigo_cliente AND 
 p.codigo_pedido = dp.codigo_pedido and dp.codigo_producto = '11679'
 group by c.codigo_cliente order by sum(dp.cantidad) asc limit 1);
+
+-- 11. Modifica la tabla detalle_pedido para insertar un campo numérico llamado iva. Mediante una transacción, 
+-- establece el valor de ese campo a 18 para aquellos registros cuyo pedido tenga fecha a partir de
+-- Enero de 2009. A continuación actualiza el resto de pedidos estableciendo el iva al 21.
+ALTER TABLE detalle_pedido add column IVA int;
+
+UPDATE detalle_pedido set IVA = 18
+where codigo_pedido in (SELECT p.codigo_pedido from pedido p 
+WHERE p.fecha_pedido >= '2009/01/01');
+
+UPDATE detalle_pedido set IVA = 21
+where codigo_pedido not in (SELECT p.codigo_pedido from pedido p 
+WHERE p.fecha_pedido >= '2009/01/01');
 
 -- 12. Modifica la tabla detalle_pedido para incorporar un campo numérico llamado total_linea y actualiza todos sus registros para 
 -- calcular su valor con la fórmula:
@@ -65,7 +80,7 @@ SET total_linea=cantidad * precio_unidad ;
 -- 13. Modifica la tabla detalle_pedido para incorporar un campo numérico llamado total_linea y actualiza todos 
 -- sus registros para calcular su valor con la fórmula:total_linea = precio_unidad*cantidad * (1 + (iva/100));
 UPDATE jardineria.detalle_pedido
-SET total_linea = precio_unidad*cantidad * (1 + (iva/100)) ;
+SET total_linea = precio_unidad*cantidad * (1 + (IVA/100)) ;
 
 -- 14. Borra el cliente que menor límite de crédito tenga. ¿Es posible borrarlo solo con una consulta? ¿Por qué?
 DELETE from cliente where codigo_cliente like
@@ -101,9 +116,5 @@ INSERT INTO jardineria.cliente
 (codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto, telefono, fax, linea_direccion1, linea_direccion2, ciudad, region, pais, codigo_postal, codigo_empleado_rep_ventas, limite_credito)
 VALUES(41, 'Cristales SA', NULL, NULL, '613123456', '613123456', 'C/ Los cristales', NULL, 'Granada', NULL, NULL, NULL, 36, NULL);
 
--- 9. Borra los pagos del cliente con menor límite de crédito.
 
--- 11. Modifica la tabla detalle_pedido para insertar un campo numérico llamado iva. Mediante una transacción, 
--- establece el valor de ese campo a 18 para aquellos registros cuyo pedido tenga fecha a partir de
--- Enero de 2009. A continuación actualiza el resto de pedidos estableciendo el iva al 21.
 
