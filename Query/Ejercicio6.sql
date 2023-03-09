@@ -32,9 +32,6 @@ where a.id_profesor  is null;
 
 SELECT id , nombre , id_profesor  FROM asignatura a where id_profesor is null;
 
--- 6 Devuelve un listado con todos los departamentos que tienen alguna asignatura que no se haya impartido en ningún curso escolar. 
--- El resultado debe mostrar el nombre del departamento y el nombre de la asignatura que no se haya impartido nunca.
-
 /*1.5.7 Consultas resumen*/
 
 -- 1 Devuelve el número total de  alumnas que hay.
@@ -101,3 +98,10 @@ group by ce.anyo_inicio ;
 -- 9 Devuelve un listado con el número de asignaturas que imparte cada profesor. El listado debe tener en cuenta aquellos profesores que no imparten ninguna asignatura. 
 -- El resultado mostrará cinco columnas: id, nombre, primer apellido, segundo apellido y número de asignaturas. 
 -- El resultado estará ordenado de mayor a menor por el número de asignaturas.
+
+SELECT  p.id_profesor , p2.nombre , p2.apellido1 , p2.apellido2 , COUNT(p.id_profesor) as 'nAsignaturas'
+from profesor p 
+join persona p2 on p2.id = p.id_profesor 
+left  join asignatura a on a.id_profesor = p.id_profesor 
+GROUP by p.id_profesor 
+ORDER by nAsignaturas DESC ;
